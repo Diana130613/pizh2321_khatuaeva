@@ -29,140 +29,89 @@
 
 # Выполнение лабораторной работы
 В ходе выполнения лабораторной работы были созданы различные классы, реализующие все необходимые методы.
-Класс ***Roman***
-Описание: Класс Roman предназначен для работы с римскими числами. Внутренняя логика класса основана на обычных арабских числах (int), которые автоматически конвертируются в римский формат при необходимости (например, при выводе).
+Класс ***Пицца***
+```python
+class Пицца:
+    """Класс Пицца содержит общие атрибуты для пиццы.
 
-Основные ограничения
-Римские числа ограничены интервалом от I до MMMCMXCIX (в арабском формате — от 1 до 3999).
-Класс поддерживает: 
-- операции сложения, 
-- вычитания, 
-- умножения
--  и деления между объектами класса Roman, а также с арабскими числами.
-**Методы и функции**
-Конструктор __init__(self, value)
-Конструктор принимает два возможных типа значений:
+    Дочерние классы будут их конкретизировать.
+    """
 
-int: инициализирует объект как арабское число.
-str: инициализирует объект как римское число.
-Если передается другой тип данных, вызывается ошибка TypeError.
+    def __init__(self):
+        """Конструктор класса.
+
+        Инициализирует атрибуты пиццы (значения по умолчанию).
+        """
+        self.название = "Заготовка"
+        self.тесто = "тонкое"  # тонкое или пышное
+        self.соус = "кетчуп"   # или другой
+        self.начинка = []      # список начинок (по умолчанию - нет)
+
+        self.цена = 0
+```
+Методы этого класса:
+- def __str__(self)
+- def подготовить(self)
+- def испечь(self)
+- def нарезать(self)
+- def упаковать(self)
+
+Этот класс является родительским классом для ***class ПиццаПепперони***, ***class ПиццаБарбекю(Пицца)***, ***class ПиццаДарыМоря(Пицца)***.
 
 ```python
-def __init__(self, value: Union[int, str]):
-    if not isinstance(value, (int, str)):
-        raise TypeError("Не могу создать римское число из {}".format(type(value)))
-    
-    if isinstance(value, int):
-        self.__check_arabic(value)
-        self._arabic = value
-    elif isinstance(value, str):
-        self._arabic = self.to_arabic(value)
+def выполнить(self):
+        print("Заказ поступил на выполенние...")
+        time.sleep(1)
+        for pizza in self.заказанные_пиццы:
+            print(f"\n{pizza.название}:")
+            print(pizza.подготовить())
+            time.sleep(1)
+            pizza.испечь()
+            time.sleep(1)
+            pizza.нарезать()
+            time.sleep(1)
+            pizza.упаковать()
+            time.sleep(1)
+        print(f"\nЗаказ №{self.номер_заказа} готов! Приятного аппетита!")
 ```
-Метод __add__(self, other)
-Метод возвращает результат сложения двух объектов класса Roman или римского числа с арабским числом.
+***Class Заказ*** реализует для каждой пиццы в заказе методы: подготовить, испечь, нарезать и упаковать.
+
+***Class Терминал*** обеспечивает взаимодействие с клиентом.
+Некоторые из его методов:
+```python
+def рассчитать_сдачу(self, оплата):
+        """Вернуть сдачу для 'оплата'.
+
+        Если оплата меньше стоимости заказа, возбудить исключение ValueError.
+        """
+        # добавление необходимого кода
+        if оплата < self.заказ.сумма():
+            raise ValueError("Недостаточно денег для оплаты заказа.")
+        return оплата - self.заказ.сумма()
+```
+Метод вычитает значение, которое ввёл пользователь из суммы заказа.
 
 ```python
-def __add__(self, other: Union['Roman', int]) -> 'Roman':
-    if not isinstance(other, (Roman, int)):
-        raise TypeError("Можно складывать только объекты типа Roman или целые числа")
-    if isinstance(other, Roman):
-        result = self._arabic + other._arabic
-    elif isinstance(other, int):
-        result = self._arabic + other
-    return Roman(result)
-```
-Метод __sub__(self, other)
-Метод возвращает результат вычитания одного объекта класса Roman из другого или вычитания арабского числа из римского.
+def принять_оплату(self):
+        """Обработать оплату.
 
-```python
-def __sub__(self, other: Union['Roman', int]) -> 'Roman':
-    if not isinstance(other, (Roman, int)):
-        raise TypeError("Можно вычитать только объекты типа Roman или целые числа")
-    if isinstance(other, Roman):
-        result = self._arabic - other._arabic
-    elif isinstance(other, int):
-        result = self._arabic - other
-    return Roman(result)
-```
-Метод __mul__(self, other)
-Метод возвращает результат умножения римского числа на другое римское число или на арабское число.
+        Эмулирует оплату заказа (клиент вводит сумму с клавиатуры).
 
-```python
-def __mul__(self, other: Union['Roman', int]) -> 'Roman':
-    if not isinstance(other, (Roman, int)):
-        raise TypeError("Можно умножать только объекты типа Roman или целые числа")
-    if isinstance(other, Roman):
-        result = self._arabic * other._arabic
-    elif isinstance(other, int):
-        result = self._arabic * other
-    return Roman(result)
+        Если сумма оплаты недостаточна (определяет метод рассчитать_сдачу())
+        или возникает другая ошибка - исключние передается выше.
+        """
+        try:
+            # добавление необходимого кода
+            print(f"Стоимость вашего заказа: {self.заказ.сумма():.2f} р.")
+            оплата = float(input("Введите сумму оплаты: "))
+            сдача = self.рассчитать_сдачу(оплата)
+            if сдача > 0:
+                print(f"Сдача: {сдача:.2f} р.")
+        except Exception:
+            print("Оплата не удалась. Заказ будет отменен.")
+            raise
 ```
-Метод __floordiv__(self, other)
-Метод возвращает результат целочисленного деления римского числа на другое римское число или на арабское число.
-
-```python
-def __floordiv__(self, other: Union['Roman', int]) -> 'Roman':
-    if not isinstance(other, (Roman, int)):
-        raise TypeError("Можно делить только объекты типа Roman или целые числа")
-    if isinstance(other, Roman):
-        result = self._arabic // other._arabic
-    elif isinstance(other, int):
-        result = self._arabic // other
-    return Roman(result)
-```
-Метод __truediv__(self, other)
-Метод перенаправляет выполнение деления на метод __floordiv__, поскольку римские числа не поддерживают дробную арифметику.
-
-```python
-def __truediv__(self, other: Union['Roman', int]) -> 'Roman':
-    return self.__floordiv__(other)
-```
-Метод __str__(self)
-Метод возвращает строку, представляющую римское число.
-
-```python
-def __str__(self) -> str:
-    return Roman.to_roman(self._arabic)
-```
-Статический метод **to_arabic(roman)**
-Метод преобразует римское число в арабское.
-
-```python
-@staticmethod
-def to_arabic(roman: str) -> int:
-    Roman.__check_roman(roman)
-    value = 0
-    i = 0
-    while i < len(roman):
-        number = Roman.letter_to_number(roman[i])
-        i += 1
-        if i == len(roman):
-            value += number
-        else:
-            next_number = Roman.letter_to_number(roman[i])
-            if next_number > number:
-                value += next_number - number
-                i += 1
-            else:
-                value += number
-    Roman.__check_arabic(value)
-    return value
-```
-Статический метод **to_roman(arabic)**
-Метод преобразует арабское число в римское.
-
-```python
-@staticmethod
-def to_roman(arabic: int) -> str:
-    Roman.__check_arabic(arabic)
-    roman = ""
-    n = arabic
-    for i, number in enumerate(Roman.NUMBERS):
-        while n >= number:
-            roman += Roman.LETTERS[i]
-            n -= Roman.NUMBERS[i]
-    return roman
-```
+Вышеприведённый метод отвечает за принятия оплаты.
 
 # Выводы
 По итогу проделанной работы можно  сказать, что мы применили знания, полученные на прошлом занятии, для реализации данного кода и получили класс для управления римскими цифрами.
