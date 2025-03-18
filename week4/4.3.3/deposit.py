@@ -1,9 +1,12 @@
 # Программирование на языке высокого уровня (Python).
-# Задание №______. Вариант !!!
+# Задание №4.3.3. Вариант 6
 #
-# Выполнил: Фамилия И.О.
-# Группа: !!!
-# E-mail: !!!
+# Выполнила: Хатуаева Д.Т.
+# Группа: ПИЖ-б-о-23-2(1)
+# E-mail: dana.khatuaeva@gmail.com
+
+from typing import Tuple
+from typing import Dict
 
 
 class TimeDeposit:
@@ -28,15 +31,19 @@ class TimeDeposit:
             возвращает сумму по окончании вклада.
     """
 
-    def __init__(self, name, interest_rate, period_limit, sum_limit):
+    def __init__(self, name: str,
+                 interest_rate: float, period_limit: Tuple[int, int],
+                 sum_limit: Tuple[float, float]):
         """Инициализировать атрибуты класса."""
-        raise NotImplementedError
-        # Уберите raise и добавьте необходимый код
-
+        # добавление необходимого кода
+        self.name: str = name
+        self._interest_rate: float = interest_rate
+        self._period_limit: Tuple[int, int] = period_limit
+        self._sum_limit: Tuple[float, float] = sum_limit
         # Проверить значения
         self._check_self()
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Вернуть строкое представление депозита.
 
         Формат вывода:
@@ -47,8 +54,14 @@ class TimeDeposit:
         Срок (мес.):        [6; 18)
         Сумма:              [1,000; 100,000)
         """
-        raise NotImplementedError
-        # Уберите raise и добавьте необходимый код
+        # добавление необходимого кода
+        name = (f"Наименование:       {self.name}")
+        currency = (f"Валюта:             {self.currency}")
+        interest_rate = (f"Процентная ставка:           {self._interest_rate}%")
+        period_limit = (f"Срок (мес.):          {self._period_limit}")
+        sum_limit = (f"Сумма:          {self._sum_limit}")
+        return "\n".join([name, currency, interest_rate,
+                          period_limit, sum_limit])
 
     @property
     def currency(self):
@@ -105,11 +118,12 @@ class BonusTimeDeposit(TimeDeposit):
         % от прибыли, мин. сумма;
     """
 
-    def __init__(self, name, interest_rate, period_limit, sum_limit, bonus):
+    def __init__(self, name: str, interest_rate: float,
+                 period_limit: Tuple[int, int], sum_limit: Tuple[float, float],
+                 bonus: Dict[int, float]):
         """Инициализировать атрибуты класса."""
-        raise NotImplementedError
-        # Уберите raise и добавьте необходимый код
-
+        # Добавление необходимого кода
+        self._bonus: Dict[int, float] = bonus
         super().__init__(name, interest_rate, period_limit, sum_limit)
 
     def __str__(self):
@@ -127,18 +141,30 @@ class BonusTimeDeposit(TimeDeposit):
         Бонус (%):          5
         Бонус (мин. сумма): 2,000
         """
-        raise NotImplementedError
-        # Уберите raise и добавьте необходимый код
+        # Добавление необходимого кода
+        name = f"Наименование:       {self.name}"
+        currency = f"Валюта:             {self.currency}"
+        interest_rate = f"Процентная ставка:             {self._interest_rate}"
+        period_limit = f"Срок (мес.):       [{self._period_limit[0]} ; {self._period_limit[1]})"
+        sum_limit = f"Сумма:              [{self._sum_limit[0]:,.2f} ; {self._sum_limit[1]:,.2f})"
+        bonus_percent = f"Бонус (%):          {self._bonus['percent']}"
+        bonus_sum = f"Бонус (мин. сумма):          {self._bonus['sum']}"
+        return "\n".join([name, currency, interest_rate, period_limit,
+                          sum_limit, bonus_percent, bonus_sum])
 
-    def _check_self(self):
+    def _check_self(self) -> None:
         """Проверить, что данные депозита являются допустимыми.
 
         Дополняем родительский метод проверкой бонуса.
         """
-        raise NotImplementedError
-        # Уберите raise и добавьте необходимый код
+        # добавление необходимого кода
+        super()._check_self()
+        assert 0 <= self._bonus['percent'], \
+            "Неверно указан процент по бонусу!"
+        assert 0 < self._bonus['sum'], \
+            "Неверно указаны ограничения по мин. сумме бонуса!"
 
-    def get_profit(self, initial_sum, period):
+    def get_profit(self, initial_sum: float, period: int) -> float:
         """Вернуть прибыль по вкладу вклада клиента.
 
         Параметры:
@@ -152,14 +178,17 @@ class BonusTimeDeposit(TimeDeposit):
         Далее, если первоначальная сумма > необходимой,
         начисляется бонус.
         """
-        raise NotImplementedError
-        # Уберите raise и добавьте необходимый код
+        # Добавление необходимого кода
+        profit = super().get_profit(initial_sum, period)
+        if initial_sum >= self._bonus['sum']:
+            profit += profit * self._bonus['percent'] / 100
+        return profit
 
 
 class CompoundTimeDeposit(TimeDeposit):
     """Cрочный вклад c ежемесячной капитализацией процентов."""
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Вернуть строкое представление депозита.
 
         К информации о родителе добавляется информация о капитализации.
@@ -173,8 +202,15 @@ class CompoundTimeDeposit(TimeDeposit):
         Сумма:              [1,000; 100,000)
         Капитализация %   : Да
         """
-        raise NotImplementedError
-        # Уберите raise и добавьте необходимый код
+        # Добавление необходимого кода
+        name = f"Наименование:       {self.name}"
+        currency = f"Валюта:             {self.currency}"
+        interest_rate = f"Процентная ставка:  {self._interest_rate}%"
+        period_limit = f"Срок (мес.):       [{self._period_limit[0]} ; {self._period_limit[1]})"
+        sum_limit = f"Сумма:              [{self._sum_limit[0]:,.2f} ; {self._sum_limit[1]:,.2f}) руб."
+        capitalization = f"Капитализация %:     Да"
+        return "\n".join([name, currency, interest_rate, period_limit, sum_limit, capitalization])
+
 
     def get_profit(self, initial_sum, period):
         """Вернуть прибыль по вкладу вклада клиента.
@@ -193,8 +229,12 @@ class CompoundTimeDeposit(TimeDeposit):
           первоначальная_сумма * (1 + % / 100 / 12) ** период -
           первоначальная_сумма
         """
-        raise NotImplementedError
-        # Уберите raise и добавьте необходимый код
+        # Добавленеи необходимого кода
+        self._check_user_params(initial_sum, period)
+        monthly_interest_rate = self._interest_rate / 1200
+        total_value = initial_sum * (1 + monthly_interest_rate) ** period
+        profit = total_value - initial_sum
+        return profit
 
 # ---
 
@@ -210,6 +250,4 @@ deposits = (
     BonusTimeDeposit("Бонусный 2", **deposits_data,
                      bonus=dict(percent=5, sum=2000)),
     CompoundTimeDeposit("С капитализацией", **deposits_data)
-    raise NotImplementedError
-    # Уберите raise и добавьте несколько вкладов
 )
