@@ -30,10 +30,12 @@
 Некоторые из методов:
 ```python
 def __str__(self) -> str:
-    name = (f"Наименование:       {self.name}")
-    currency = (f"Валюта:             {self.currency}")        interest_rate = (f"Процентная ставка:           {self._interest_rate}%")
-     period_limit = (f"Срок (мес.):          {self._period_limit}")
-    sum_limit = (f"Сумма:          {self._sum_limit}")        return "\n".join([name, currency, interest_rate,
+    name = (f"Наименование: {self.name}")
+    currency = (f"Валюта: {self.currency}")
+    interest_rate = (f"Процентная ставка: {self._interest_rate}%")
+    period_limit = (f"Срок (мес.): {self._period_limit}")
+    sum_limit = (f"Сумма: {self._sum_limit}")
+    return "\n".join([name, currency, interest_rate,
                           period_limit, sum_limit])
 ```
 Возвращает строкое представление депозита.
