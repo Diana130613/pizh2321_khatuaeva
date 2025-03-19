@@ -211,7 +211,6 @@ class CompoundTimeDeposit(TimeDeposit):
         capitalization = f"Капитализация %:     Да"
         return "\n".join([name, currency, interest_rate, period_limit, sum_limit, capitalization])
 
-
     def get_profit(self, initial_sum, period):
         """Вернуть прибыль по вкладу вклада клиента.
 
