@@ -1,0 +1,3 @@
+C:/Users/User/Desktop/OOPcpp/labwork1/build/CMakeFiles/labwork1.dir
+C:/Users/User/Desktop/OOPcpp/labwork1/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/User/Desktop/OOPcpp/labwork1/build/CMakeFiles/ZERO_CHECK.dir

@@ -1,0 +1,10 @@
+^C:\USERS\USER\DESKTOP\OOPCPP\LABWORK1\BUILD\CMAKEFILES\36362F6D0653A2F2521A2BB910590569\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/User/Desktop/OOPcpp/labwork1 -BC:/Users/User/Desktop/OOPcpp/labwork1/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/User/Desktop/OOPcpp/labwork1/build/labwork1.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
